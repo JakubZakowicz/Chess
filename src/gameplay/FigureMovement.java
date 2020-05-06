@@ -17,10 +17,12 @@ class FigureMovement {
     private int blackIndex = 0;         // Index of the black captured slot
     private boolean isBlackCheck = false;
     private boolean isWhiteCheck = false;
-    private boolean[][] availableSquares = new boolean[8][8];
+    private final boolean[][] blackKingSideSquares = new boolean[8][8];
+    private final boolean[][] whiteKingSideSquares = new boolean[8][8];
 
     FigureMovement(Board board) {
         b = board;
+        kingSideSquares();
     }
 
 ////////////////////////////////////////// White Figures ///////////////////////////////////////////////////////////////
@@ -186,6 +188,7 @@ class FigureMovement {
         if(pickedFigure == Figures.WhiteKing) {
 
             kingMovement(e, b.wKingB, b.wKingW);
+            kingSideSquares();
         }
     }
 
@@ -385,6 +388,7 @@ class FigureMovement {
         if(pickedFigure == Figures.BlackKing) {
 
             kingMovement(e, b.bKingB, b.bKingW);
+            kingSideSquares();
         }
     }
 
@@ -1267,12 +1271,7 @@ class FigureMovement {
 
             try {
                 if(e.getSource() == b.squares[y - 1][x] && !isWhiteFigure(y - 1, x)
-                        && b.squares[y - 2][x].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y - 2][x].getIcon() != b.bKingB.getFigure()
-                        && b.squares[y - 2][x + 1].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y - 2][x + 1].getIcon() != b.bKingB.getFigure()
-                        && b.squares[y - 2][x - 1].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y - 2][x - 1].getIcon() != b.bKingB.getFigure()) {
+                        && !blackKingSideSquares[y - 1][x]) {
 
                     capturingAFigure(y - 1, x);
                     if(((y - 1) + x) % 2 == 0) {
@@ -1289,12 +1288,7 @@ class FigureMovement {
 
             try {
                 if(e.getSource() == b.squares[y + 1][x] && !isWhiteFigure(y + 1, x)
-                        && b.squares[y + 2][x].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y + 2][x].getIcon() != b.bKingB.getFigure()
-                        && b.squares[y + 2][x + 1].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y + 2][x + 1].getIcon() != b.bKingB.getFigure()
-                        && b.squares[y + 2][x - 1].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y + 2][x - 1].getIcon() != b.bKingB.getFigure()) {
+                        && !blackKingSideSquares[y + 1][x]) {
 
                     capturingAFigure(y + 1, x);
                     if(((y + 1) + x) % 2 == 0) {
@@ -1311,12 +1305,7 @@ class FigureMovement {
 
             try {
                 if(e.getSource() == b.squares[y][x - 1] && !isWhiteFigure(y, x - 1)
-                        && b.squares[y][x - 2].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y][x - 2].getIcon() != b.bKingB.getFigure()
-                        && b.squares[y - 1][x - 2].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y - 1][x - 2].getIcon() != b.bKingB.getFigure()
-                        && b.squares[y + 1][x - 2].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y + 1][x - 2].getIcon() != b.bKingB.getFigure()) {
+                        && !blackKingSideSquares[y][x - 1]) {
 
                     capturingAFigure(y, x - 1);
                     if((y + (x - 1)) % 2 == 0) {
@@ -1333,12 +1322,7 @@ class FigureMovement {
 
             try {
                 if(e.getSource() == b.squares[y][x + 1] && !isWhiteFigure(y, x + 1)
-                        && b.squares[y][x + 2].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y][x + 2].getIcon() != b.bKingB.getFigure()
-                        && b.squares[y - 1][x + 2].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y - 1][x + 2].getIcon() != b.bKingB.getFigure()
-                        && b.squares[y + 1][x + 2].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y + 1][x + 2].getIcon() != b.bKingB.getFigure()) {
+                        && !blackKingSideSquares[y][x + 1]) {
 
                     capturingAFigure(y, x + 1);
                     if((y + (x + 1)) % 2 == 0) {
@@ -1356,12 +1340,7 @@ class FigureMovement {
 
             try {
                 if(e.getSource() == b.squares[y + 1][x + 1] && !isWhiteFigure(y + 1, x + 1)
-                        && b.squares[y + 2][x + 2].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y + 2][x + 2].getIcon() != b.bKingB.getFigure()
-                        && b.squares[y + 2][x].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y + 2][x].getIcon() != b.bKingB.getFigure()
-                        && b.squares[y][x - 2].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y][x - 2].getIcon() != b.bKingB.getFigure()) {
+                        && !blackKingSideSquares[y + 1][x + 1]) {
 
                     capturingAFigure(y + 1, x + 1);
                     if(((y + 1) + (x + 1)) % 2 == 0) {
@@ -1379,12 +1358,7 @@ class FigureMovement {
 
             try {
                 if(e.getSource() == b.squares[y - 1][x - 1] && !isWhiteFigure(y - 1, x - 1)
-                        && b.squares[y - 2][x - 2].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y - 2][x - 2].getIcon() != b.bKingB.getFigure()
-                        && b.squares[y - 2][x].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y - 2][x].getIcon() != b.bKingB.getFigure()
-                        && b.squares[y][x + 2].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y][x + 2].getIcon() != b.bKingB.getFigure()) {
+                        && !blackKingSideSquares[y - 1][x - 1]) {
 
                     capturingAFigure(y - 1, x - 1);
                     if(((y - 1) + (x - 1)) % 2 == 0) {
@@ -1402,12 +1376,7 @@ class FigureMovement {
 
             try {
                 if(e.getSource() == b.squares[y + 1][x - 1] && !isWhiteFigure(y + 1, x - 1)
-                        && b.squares[y + 2][x - 2].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y + 2][x - 2].getIcon() != b.bKingB.getFigure()
-                        && b.squares[y + 2][x].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y + 2][x].getIcon() != b.bKingB.getFigure()
-                        && b.squares[y][x - 2].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y][x - 2].getIcon() != b.bKingB.getFigure()) {
+                        && !blackKingSideSquares[y + 1][x - 1]) {
 
                     capturingAFigure(y + 1, x - 1);
                     if(((y + 1) + (x - 1)) % 2 == 0) {
@@ -1425,14 +1394,7 @@ class FigureMovement {
 
             try {
                 if(e.getSource() == b.squares[y - 1][x + 1] && !isWhiteFigure(y - 1, x + 1)
-                        && b.squares[y - 2][x + 2].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y - 2][x + 2].getIcon() != b.bKingB.getFigure()
-                        && b.squares[y - 2][x].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y - 2][x].getIcon() != b.bKingB.getFigure()
-                        && b.squares[y - 2][x + 1].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y - 2][x - 1].getIcon() != b.bKingB.getFigure()
-                        && b.squares[y][x + 2].getIcon() != b.bKingW.getFigure()
-                        && b.squares[y][x + 2].getIcon() != b.bKingB.getFigure()) {
+                        && !blackKingSideSquares[y - 1][x + 1]) {
 
                     capturingAFigure(y - 1, x + 1);
                     if(((y - 1) + (x + 1)) % 2 == 0) {
@@ -1452,12 +1414,7 @@ class FigureMovement {
 
             try {
                 if(e.getSource() == b.squares[y - 1][x] && !isBlackFigure(y - 1, x)
-                        && b.squares[y - 2][x].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y - 2][x].getIcon() != b.wKingB.getFigure()
-                        && b.squares[y - 2][x - 1].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y - 2][x - 1].getIcon() != b.wKingB.getFigure()
-                        && b.squares[y - 2][x + 1].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y - 2][x + 1].getIcon() != b.wKingB.getFigure()) {
+                        && !whiteKingSideSquares[y - 1][x]) {
 
                     capturingAFigure(y - 1, x);
                     if(((y - 1) + x) % 2 == 0) {
@@ -1474,12 +1431,7 @@ class FigureMovement {
 
             try {
                 if(e.getSource() == b.squares[y + 1][x] && !isBlackFigure(y + 1, x)
-                        && b.squares[y + 2][x].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y + 2][x].getIcon() != b.wKingB.getFigure()
-                        && b.squares[y + 2][x - 1].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y + 2][x - 1].getIcon() != b.wKingB.getFigure()
-                        && b.squares[y + 2][x + 1].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y + 2][x + 1].getIcon() != b.wKingB.getFigure()) {
+                        && !whiteKingSideSquares[y + 1][x]) {
 
                     capturingAFigure(y + 1, x);
                     if(((y + 1) + x) % 2 == 0) {
@@ -1496,12 +1448,7 @@ class FigureMovement {
 
             try {
                 if(e.getSource() == b.squares[y][x - 1] && !isBlackFigure(y, x - 1)
-                        && b.squares[y][x - 2].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y][x - 2].getIcon() != b.wKingB.getFigure()
-                        && b.squares[y - 1][x - 2].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y - 1][x - 2].getIcon() != b.wKingB.getFigure()
-                        && b.squares[y + 1][x - 2].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y + 1][x - 2].getIcon() != b.wKingB.getFigure()) {
+                        && !whiteKingSideSquares[y][x - 1]) {
 
                     capturingAFigure(y, x - 1);
                     if((y + (x - 1)) % 2 == 0) {
@@ -1518,12 +1465,7 @@ class FigureMovement {
 
             try {
                 if(e.getSource() == b.squares[y][x + 1] && !isBlackFigure(y, x + 1)
-                        && b.squares[y][x + 2].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y][x + 2].getIcon() != b.wKingB.getFigure()
-                        && b.squares[y - 1][x + 2].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y - 1][x + 2].getIcon() != b.wKingB.getFigure()
-                        && b.squares[y + 1][x + 2].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y + 1][x + 2].getIcon() != b.wKingB.getFigure()) {
+                        && !whiteKingSideSquares[y][x + 1]) {
 
                     capturingAFigure(y, x + 1);
                     if((y + (x + 1)) % 2 == 0) {
@@ -1541,12 +1483,7 @@ class FigureMovement {
 
             try {
                 if(e.getSource() == b.squares[y + 1][x + 1] && !isBlackFigure(y + 1, x + 1)
-                        && b.squares[y + 2][x + 2].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y + 2][x + 2].getIcon() != b.wKingB.getFigure()
-                        && b.squares[y + 2][x].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y + 2][x].getIcon() != b.wKingB.getFigure()
-                        && b.squares[y][x - 2].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y][x - 2].getIcon() != b.wKingB.getFigure()) {
+                        && !whiteKingSideSquares[y + 1][x + 1]) {
 
                     capturingAFigure(y + 1, x + 1);
                     if(((y + 1) + (x + 1)) % 2 == 0) {
@@ -1564,12 +1501,7 @@ class FigureMovement {
 
             try {
                 if(e.getSource() == b.squares[y - 1][x - 1] && !isBlackFigure(y - 1, x - 1)
-                        && b.squares[y - 2][x - 2].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y - 2][x - 2].getIcon() != b.wKingB.getFigure()
-                        && b.squares[y - 2][x].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y - 2][x].getIcon() != b.wKingB.getFigure()
-                        && b.squares[y][x + 2].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y][x + 2].getIcon() != b.wKingB.getFigure()) {
+                        && !whiteKingSideSquares[y - 1][x - 1]) {
 
                     capturingAFigure(y - 1, x - 1);
                     if(((y - 1) + (x - 1)) % 2 == 0) {
@@ -1586,12 +1518,7 @@ class FigureMovement {
 
             try {
                 if(e.getSource() == b.squares[y + 1][x - 1] && !isBlackFigure(y + 1, x - 1)
-                        && b.squares[y + 2][x - 2].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y + 2][x - 2].getIcon() != b.wKingB.getFigure()
-                        && b.squares[y + 2][x].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y + 2][x].getIcon() != b.wKingB.getFigure()
-                        && b.squares[y][x - 2].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y][x - 2].getIcon() != b.wKingB.getFigure()) {
+                        && !whiteKingSideSquares[y + 1][x - 1]) {
 
                     capturingAFigure(y + 1, x - 1);
                     if(((y + 1) + (x - 1)) % 2 == 0) {
@@ -1609,12 +1536,7 @@ class FigureMovement {
 
             try {
                 if(e.getSource() == b.squares[y - 1][x + 1] && !isBlackFigure(y - 1, x + 1)
-                        && b.squares[y - 2][x + 2].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y - 2][x + 2].getIcon() != b.wKingB.getFigure()
-                        && b.squares[y - 2][x].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y - 2][x].getIcon() != b.wKingB.getFigure()
-                        && b.squares[y][x + 2].getIcon() != b.wKingW.getFigure()
-                        && b.squares[y][x + 2].getIcon() != b.wKingB.getFigure()) {
+                        && !whiteKingSideSquares[y - 1][x + 1]) {
 
                     capturingAFigure(y - 1, x + 1);
                     if(((y - 1) + (x + 1)) % 2 == 0) {
@@ -1932,33 +1854,69 @@ class FigureMovement {
 
     }
 
-    private void cantMove() {
+    void kingSideSquares() {
 
         for(int i = 0; i < 8; i++) {
             for(int j = 0; j < 8; j++) {
 
-                availableSquares[i][j] = false;
+                whiteKingSideSquares[i][j] = false;
+                blackKingSideSquares[i][j] = false;
 
             }
         }
 
 
-        for(int i = 1; i < 7; i++) {
-            for(int j = 1; j < 7; j++) {
+        for(int i = 0; i < 8; i++) {
+            for(int j = 0; j < 8; j++) {
 
                 if(b.squares[i][j].getIcon() == b.wKingW.getFigure()
-                        || b.squares[i][j].getIcon() == b.wKingB.getFigure()
-                        || b.squares[i][j].getIcon() == b.bKingW.getFigure()
+                        || b.squares[i][j].getIcon() == b.wKingB.getFigure()) {
+
+                    if(i - 1 != -1) {
+
+                        whiteKingSideSquares[i - 1][j] = true;
+
+                        if(j - 1 != -1) whiteKingSideSquares[i - 1][j - 1] = true;
+                        if(j + 1 != 8) whiteKingSideSquares[i - 1][j + 1] = true;
+
+                    }
+
+                    if(i + 1 != 8) {
+
+                        whiteKingSideSquares[i + 1][j] = true;
+
+                        if(j - 1 != -1) whiteKingSideSquares[i + 1][j - 1] = true;
+                        if(j + 1 != 8) whiteKingSideSquares[i + 1][j + 1] = true;
+                    }
+
+                    if(j - 1 != -1) whiteKingSideSquares[i][j - 1] = true;
+                    if(j + 1 != 8) whiteKingSideSquares[i][j + 1] = true;
+
+
+                }
+
+                if(b.squares[i][j].getIcon() == b.bKingW.getFigure()
                         || b.squares[i][j].getIcon() == b.bKingB.getFigure()) {
 
-                    availableSquares[i + 1][j] = true;
-                    availableSquares[i - 1][j] = true;
-                    availableSquares[i][j + 1] = true;
-                    availableSquares[i][j - 1] = true;
-                    availableSquares[i + 1][j + 1] = true;
-                    availableSquares[i + 1][j - 1] = true;
-                    availableSquares[i - 1][j + 1] = true;
-                    availableSquares[i - 1][j - 1] = true;
+                    if(i - 1 != -1) {
+
+                        blackKingSideSquares[i - 1][j] = true;
+
+                        if(j - 1 != -1) blackKingSideSquares[i - 1][j - 1] = true;
+                        if(j + 1 != 8) blackKingSideSquares[i - 1][j + 1] = true;
+
+                    }
+
+                    if(i + 1 != 8) {
+
+                        blackKingSideSquares[i + 1][j] = true;
+
+                        if(j - 1 != -1) blackKingSideSquares[i + 1][j - 1] = true;
+                        if(j + 1 != 8) blackKingSideSquares[i + 1][j + 1] = true;
+                    }
+
+                    if(j - 1 != -1) blackKingSideSquares[i][j - 1] = true;
+                    if(j + 1 != 8) blackKingSideSquares[i][j + 1] = true;
 
                 }
 

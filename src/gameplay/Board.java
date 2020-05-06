@@ -37,7 +37,7 @@ public class Board extends JPanel {
     public final WRookW wRookW = new WRookW("Figures\\WhiteRookWhiteBoard.png");
     public final BlackBoard blackBoard = new BlackBoard("Figures\\BlackBoard.png");
     public final WhiteBoard whiteBoard = new WhiteBoard("Figures\\WhiteBoard.png");
-    public final Gameplay gameplay = new Gameplay(this);
+    public final Gameplay gameplay;
     public final JButton[] whiteCaptureSlots = new JButton[16];
     public final JButton[] blackCaptureSlots = new JButton[16];
 
@@ -50,7 +50,10 @@ public class Board extends JPanel {
         initBoard();
         initWhiteCaptureSlots();
         initBlackCaptureSlots();
+        gameplay = new Gameplay(this);
         addingListeners();
+
+
     }
 
     private void initBoard() {
